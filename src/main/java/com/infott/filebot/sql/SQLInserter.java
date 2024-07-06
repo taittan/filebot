@@ -17,17 +17,21 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("restriction")
 public class SQLInserter {
@@ -147,38 +151,70 @@ public class SQLInserter {
                 return;
             }
 
-            try {
-                List<String> lines = Files.readAllLines(file.toPath());
-                List<String> insertStatements = lines.stream()
-                        .filter(line -> line.trim().toUpperCase().startsWith("INSERT"))
-                        .collect(Collectors.toList());
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line;
+                List<String> statements = new ArrayList<>();
+                LocalDateTime startTime = LocalDateTime.now();
 
-                executeStatements(insertStatements, databaseConfig);
+                while ((line = reader.readLine()) != null) {
+                    if (line.trim().toUpperCase().startsWith("INSERT")) {
+                        if (line.endsWith(";")) {
+                            line = line.substring(0, line.length() - 1);
+                        }
+                        statements.add(line);
+                    }
+                    if (statements.size() == 500) {
+                        if (!executeStatements(statements, databaseConfig)) {
+                            break;
+                        }
+                        statements.clear();
+                    }
+                }
+                if (!statements.isEmpty()) {
+                    executeStatements(statements, databaseConfig);
+                }
 
-                log("Execution completed. " + insertStatements.size() + " statements executed.");
+                LocalDateTime endTime = LocalDateTime.now();
+                log("Execution completed. " + statements.size() + " statements executed.");
+                log("Total time taken: " + getTimeTaken(startTime, endTime));
             } catch (IOException e) {
                 log("Error processing file: " + e.getMessage());
             }
         });
     }
 
-    private void executeStatements(List<String> statements, DatabaseConfig databaseConfig) {
+    private boolean executeStatements(List<String> statements, DatabaseConfig databaseConfig) {
         try {
             Class.forName(databaseConfig.getDriverClassName());
             try (Connection connection = DriverManager.getConnection(databaseConfig.getUrl(), databaseConfig.getUsername(), databaseConfig.getPassword());
                  Statement statement = connection.createStatement()) {
 
+                // Set NLS format for the session
+                statement.execute("ALTER SESSION SET NLS_DATE_LANGUAGE = 'ENGLISH'");
+                connection.setAutoCommit(false);
+
                 for (String sql : statements) {
-                    statement.execute(sql);
-                    log("Executed: " + sql);
+                    try {
+                        statement.execute(sql);
+                        log("Executed successfully at " + getCurrentTime(LocalDateTime.now()));
+                    } catch (SQLException e) {
+                        log("SQL Error: " + e.getMessage() + " for statement: " + sql);
+                        connection.rollback();
+                        return false;
+                    }
                 }
 
+                connection.commit();
             } catch (SQLException e) {
                 log("SQL Error: " + e.getMessage());
+                return false;
             }
         } catch (ClassNotFoundException e) {
             log("Driver not found: " + e.getMessage());
+            return false;
         }
+
+        return true;
     }
 
     private void handleTabPress(KeyEvent event, Node nextNode) {
@@ -195,5 +231,16 @@ public class SQLInserter {
                 logArea.setScrollTop(Double.MAX_VALUE);
             }
         });
+    }
+
+    private String getCurrentTime(LocalDateTime time) {
+        return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+    private String getTimeTaken(LocalDateTime start, LocalDateTime end) {
+        Duration duration = Duration.between(start, end);
+        long minutes = duration.toMinutes();
+        long seconds = duration.getSeconds() % 60;
+        return String.format("%d minutes and %d seconds", minutes, seconds);
     }
 }
