@@ -3,6 +3,7 @@ package com.infott.filebot;
 import com.infott.filebot.csv.CsvHandler;
 import com.infott.filebot.filecopier.FileCopier;
 import com.infott.filebot.oentry.OentryReleaser;
+import com.infott.filebot.sql.DescToSQL;
 import com.infott.filebot.sql.SQLInserter;
 import com.infott.filebot.unzip.UnzipManager;
 
@@ -72,12 +73,23 @@ public class MainTabPane extends Application {
         
         sqlInserterTab.setContent(sqlInserterVBox);
         sqlInserterTab.setClosable(false);
-
+        
+        // 6th tab with DescToSQL
+        Tab descToSQLTab = new Tab();
+        descToSQLTab.setText("Desc To SQL");
+        
+        DescToSQL descToSQL = new DescToSQL();
+        VBox descToSQLVBox = descToSQL.createDescToSQLUI();
+        
+        descToSQLTab.setContent(descToSQLVBox);
+        descToSQLTab.setClosable(false);
+        
         tabPane.getTabs().add(fileCopierTab);
         tabPane.getTabs().add(unzipTab);
         tabPane.getTabs().add(oentryReleaserTab);
         tabPane.getTabs().add(csvHandlerTab);
         tabPane.getTabs().add(sqlInserterTab);
+        tabPane.getTabs().add(descToSQLTab);
 
         Scene scene = new Scene(tabPane, 800, 450);
         scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());

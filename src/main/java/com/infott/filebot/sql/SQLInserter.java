@@ -47,7 +47,7 @@ public class SQLInserter {
         grid.setVgap(8);
         grid.setHgap(10);
 
-        int textFieldLength = 630;
+        int textFieldLength = 635;
 
         // First row: SQL File path
         Label filePathLabel = new Label("SQL File:");
