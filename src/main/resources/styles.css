@@ -1,0 +1,6 @@
+.grid-pane {
+    -fx-border-color: blue;
+    -fx-border-width: 2;
+    -fx-border-style: solid;
+    -fx-padding: 10;
+}
