@@ -250,6 +250,16 @@ public class CsvHandler {
 
             try {
                 List<String> lines = Files.readAllLines(file.toPath());
+                if (lines.isEmpty()) {
+                    log("Error: CSV file is empty");
+                    return;
+                }
+
+                // Skip the first four lines if the file starts with "GENEOS Status Report"
+                if (lines.get(0).startsWith("GENEOS Status Report")) {
+                    lines = lines.subList(4, lines.size());
+                }
+
                 List<String> updatedLines = processCsv(lines, operation, column, newColumnContent, replaceContent);
 
                 Files.write(file.toPath(), updatedLines);
@@ -294,7 +304,9 @@ public class CsvHandler {
                                 break;
                             case "Modify Column":
                                 if ("Replace".equals(modifyOption)) {
-                                    if (!replaceContent.isEmpty() && fields[i].contains(replaceContent)) {
+                                    if ("***".equals(replaceContent)) {	// *** special handle
+                                        fields[i] = newColumnContent;
+                                    } else if (!replaceContent.isEmpty() && fields[i].contains(replaceContent)) {
                                         fields[i] = fields[i].replace(replaceContent, newColumnContent);
                                     }
                                     updatedLine.append(fields[i]).append(",");

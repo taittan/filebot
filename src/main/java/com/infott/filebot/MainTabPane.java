@@ -55,27 +55,7 @@ public class MainTabPane extends Application {
         oentryReleaserTab.setContent(oentryReleaserVBox);
         oentryReleaserTab.setClosable(false);
         
-        // Fourth tab with CsvHandler
-        Tab csvHandlerTab = new Tab();
-        csvHandlerTab.setText("CSV Handler");
-
-        CsvHandler csvHandler = new CsvHandler();
-        VBox csvHandlerVBox = csvHandler.createCsvHandlerUI();
-        
-        csvHandlerTab.setContent(csvHandlerVBox);
-        csvHandlerTab.setClosable(false);
-        
-        // 5th tab with SQLInserter
-        Tab sqlInserterTab = new Tab();
-        sqlInserterTab.setText("SQL Inserter");
-
-        SQLInserter sqlInserter = new SQLInserter();
-        VBox sqlInserterVBox = sqlInserter.createSQLInserterUI();
-        
-        sqlInserterTab.setContent(sqlInserterVBox);
-        sqlInserterTab.setClosable(false);
-        
-        // 6th tab with DescToSQL
+        // 4th tab with DescToSQL
         Tab descToSQLTab = new Tab();
         descToSQLTab.setText("Desc To SQL");
         
@@ -85,7 +65,17 @@ public class MainTabPane extends Application {
         descToSQLTab.setContent(descToSQLVBox);
         descToSQLTab.setClosable(false);
         
-        // 7th tab with CsvGenInsertSQL
+        // 5th tab with CsvHandler
+        Tab csvHandlerTab = new Tab();
+        csvHandlerTab.setText("CSV Handler");
+
+        CsvHandler csvHandler = new CsvHandler();
+        VBox csvHandlerVBox = csvHandler.createCsvHandlerUI();
+        
+        csvHandlerTab.setContent(csvHandlerVBox);
+        csvHandlerTab.setClosable(false);
+        
+        // 6th tab with CsvGenInsertSQL
         Tab csvGenInsertSQLTab = new Tab();
         csvGenInsertSQLTab.setText("CSV Gen Insert");
         
@@ -95,13 +85,23 @@ public class MainTabPane extends Application {
         csvGenInsertSQLTab.setContent(csvGenInsertSQLVBox);
         csvGenInsertSQLTab.setClosable(false);
         
+        // 7th tab with SQLInserter
+        Tab sqlInserterTab = new Tab();
+        sqlInserterTab.setText("SQL Inserter");
+
+        SQLInserter sqlInserter = new SQLInserter();
+        VBox sqlInserterVBox = sqlInserter.createSQLInserterUI();
+        
+        sqlInserterTab.setContent(sqlInserterVBox);
+        sqlInserterTab.setClosable(false);
+        
         tabPane.getTabs().add(fileCopierTab);
         tabPane.getTabs().add(unzipTab);
         tabPane.getTabs().add(oentryReleaserTab);
-        tabPane.getTabs().add(csvHandlerTab);
-        tabPane.getTabs().add(sqlInserterTab);
         tabPane.getTabs().add(descToSQLTab);
+        tabPane.getTabs().add(csvHandlerTab);
         tabPane.getTabs().add(csvGenInsertSQLTab);
+        tabPane.getTabs().add(sqlInserterTab);
 
         Scene scene = new Scene(tabPane, 800, 450);
         scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
