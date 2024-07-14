@@ -64,7 +64,7 @@ public class OentryReleaser {
         Label filePathLabel = new Label("Oentry:");
         GridPane.setConstraints(filePathLabel, 0, 0);
 
-        TextField filePathField = new TextField("HKW20158319C01\\\\OESUserCFS\\\\UserMaint\\\\cfg\\\\Oentry.cfg, HKW20158319C01\\\\OESUserCFS\\\\UserMaint\\\\cfg\\\\Oentry.cfg");
+        TextField filePathField = new TextField("\\\\HKW20158319C01\\OESUserCFS\\UserMaint\\cfg\\Oentry.cfg, \\\\HKW20158319C01\\OESUserCFS\\UserMaint\\cfg\\Oentry.cfg");
         filePathField.setEditable(false);
         filePathField.setPrefWidth(textFieldLength);
         GridPane.setConstraints(filePathField, 1, 0);

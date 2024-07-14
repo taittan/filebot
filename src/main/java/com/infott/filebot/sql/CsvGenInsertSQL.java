@@ -171,7 +171,7 @@ public class CsvGenInsertSQL {
                 StringJoiner valueJoiner = new StringJoiner(", ", "(", ")");
 
                 for (int i = 0; i < values.length; i++) {
-                    String value = values[i];
+                    String value = trimDoubleQuote(values[i]);
                     if (columnTypes[i].startsWith("TIMESTAMP")) {
                         valueJoiner.add("TO_TIMESTAMP('" + value + "', 'yyyy/mm/dd hh24:mi:ss.ff3')");
                     } else {
@@ -279,6 +279,18 @@ public class CsvGenInsertSQL {
         } else {
             return "VARCHAR2";
         }
+    }
+    
+    private String trimDoubleQuote(String field) {
+    	if (field == null || field.length() < 2) {
+    		return field;
+    	}
+    	
+    	if (field.startsWith("\"") && field.endsWith("\"")) {
+    		return field.substring(1, field.length() - 1);
+    	}
+    	
+    	return field;
     }
 
     private void log(String message) {

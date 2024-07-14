@@ -41,6 +41,9 @@ public class SQLInserter {
     private TextArea logArea;
     private ExecutorService executorService;
 
+    private static final int BATCH_SIZE = 500;
+    private static final int LOG_LIMIT = 1000;
+
     public VBox createSQLInserterUI() {
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10, 10, 10, 10));
@@ -163,7 +166,7 @@ public class SQLInserter {
                         }
                         statements.add(line);
                     }
-                    if (statements.size() == 500) {
+                    if (statements.size() == BATCH_SIZE) {
                         if (!executeStatements(statements, databaseConfig)) {
                             break;
                         }
@@ -227,9 +230,10 @@ public class SQLInserter {
     private void log(String message) {
         Platform.runLater(() -> {
             logArea.appendText(message + "\n");
-            if (logArea.getParagraphs().size() > 10) {
-                logArea.setScrollTop(Double.MAX_VALUE);
+            if (logArea.getParagraphs().size() > LOG_LIMIT) {
+                logArea.setText(logArea.getText().substring(logArea.getText().indexOf("\n") + 1));
             }
+            logArea.setScrollTop(Double.MAX_VALUE);
         });
     }
 

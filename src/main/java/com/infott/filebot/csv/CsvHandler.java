@@ -279,6 +279,8 @@ public class CsvHandler {
         } else {
             modifyOption = "";
         }
+        
+        updatedLines.add(lines.remove(0));	// header
 
         for (String line : lines) {
             String[] fields = line.split(",");
@@ -304,8 +306,10 @@ public class CsvHandler {
                                 break;
                             case "Modify Column":
                                 if ("Replace".equals(modifyOption)) {
-                                    if ("***".equals(replaceContent)) {	// *** special handle
+                                    if ("***".equals(replaceContent)) {						// *** special handle, all rows value replaced with newColumnContent
                                         fields[i] = newColumnContent;
+                                    } else if ("*MMM*".equalsIgnoreCase(replaceContent)) {	// *MMM* special handle, change date time format
+                                    	fields[i] = convertDateFormat(fields[i]);
                                     } else if (!replaceContent.isEmpty() && fields[i].contains(replaceContent)) {
                                         fields[i] = fields[i].replace(replaceContent, newColumnContent);
                                     }
@@ -335,6 +339,68 @@ public class CsvHandler {
         }
 
         return updatedLines;
+    }
+    
+    private String convertDateFormat(String inputDate) {
+    	// cut string
+    	String[] dateTimeParts = inputDate.trim().split(" ");
+    	String datePart = dateTimeParts[0];
+    	String timePart = dateTimeParts[1];
+    	String nanoSeconds = timePart.split("\\.")[3];
+    	String amPmPart = dateTimeParts[2];
+    	
+    	// parse date
+    	String[] dateParts = datePart.split("-");
+    	String day = dateParts[0];
+    	String month = convertMonth(dateParts[1]);
+    	String year = "20" + dateParts[2];
+    	
+    	// parse time
+    	String[] timeParts = timePart.split("\\.");
+    	String hour = timeParts[0];
+    	String minute = timeParts[1];
+    	String second = timeParts[2];
+    	String milliSecond = nanoSeconds.substring(0, 3);
+    	
+    	if (amPmPart.equalsIgnoreCase("PM") && !hour.equals("12")) {
+    		hour = String.valueOf(Integer.parseInt(hour) + 12);
+    	} else if (amPmPart.equalsIgnoreCase("AM") && hour.equals("12")) {
+    		hour = "00";
+    	}
+    	
+    	return year + "/" + month + "/" + day + " "
+    		+ hour + ":" + minute + ":" + second + "." + milliSecond;
+    }
+    
+    private String convertMonth(String month) {
+        switch (month.toUpperCase()) {
+            case "JAN":
+                return "01";
+            case "FEB":
+                return "02";
+            case "MAR":
+                return "03";
+            case "APR":
+                return "04";
+            case "MAY":
+                return "05";
+            case "JUN":
+                return "06";
+            case "JUL":
+                return "07";
+            case "AUG":
+                return "08";
+            case "SEP":
+                return "09";
+            case "OCT":
+                return "10";
+            case "NOV":
+                return "11";
+            case "DEC":
+                return "12";
+            default:
+                throw new IllegalArgumentException("Invalid month: " + month);
+        }
     }
 
     private void handleTabPress(KeyEvent event, Node nextNode) {
