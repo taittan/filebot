@@ -1,0 +1,70 @@
+什么是 Spring 框架？简述其核心特性。
+
+答案：Spring 是一个开源的 Java 框架，主要用于开发企业级应用程序。其核心特性包括：
+依赖注入（DI）：通过 IOC 容器管理对象依赖，实现松耦合。
+面向切面编程（AOP）：用于处理横切关注点，如事务管理、日志记录等。
+声明式事务管理：通过注解或 XML 配置，简化事务管理。
+MVC 框架：提供了强大的 Web 应用开发支持。
+丰富的集成支持：与各种持久层技术（如 Hibernate、JPA）和第三方库集成。
+解释 Spring 中的依赖注入（DI）以及它的实现方式。
+
+答案：依赖注入是 Spring 实现控制反转（IOC）的核心机制。它通过将对象的依赖从类内部移到外部，由 Spring 容器在运行时注入。DI 的实现方式主要有两种：
+构造器注入：通过类的构造函数注入依赖对象。
+Setter 注入：通过 setter 方法注入依赖对象。
+Spring 中的 Bean 作用域有哪些？
+
+答案：Spring 提供了以下几种 Bean 作用域：
+Singleton：默认作用域，每个 Spring 容器中只有一个 Bean 实例。
+Prototype：每次请求都会创建一个新的 Bean 实例。
+Request：在 Web 应用中，每次 HTTP 请求都会创建一个新的 Bean 实例。
+Session：在 Web 应用中，每个 HTTP 会话都会创建一个新的 Bean 实例。
+GlobalSession：仅在基于 Portlet 的 Web 应用中使用，每个全局 HTTP 会话会创建一个新的 Bean 实例。
+Application：整个生命周期内共享同一个实例，通常用于应用范围内的全局对象。
+什么是 Spring 的 AOP？它的主要用途是什么？
+
+答案：AOP（面向切面编程）是 Spring 框架的一个重要特性，允许通过将横切关注点（如日志记录、事务管理、性能监控等）从业务逻辑中分离出来，提高代码的模块化和可维护性。AOP 主要通过以下方式实现：
+Before：在目标方法执行前运行。
+After：在目标方法执行后运行。
+Around：在目标方法执行前后都可以运行。
+AfterReturning：在目标方法成功返回后运行。
+AfterThrowing：在目标方法抛出异常后运行。
+Spring Boot 是什么？它与 Spring 框架有何区别？
+
+答案：Spring Boot 是基于 Spring 框架的快速开发平台，旨在简化 Spring 应用程序的配置和部署。主要区别有：
+自动配置：Spring Boot 通过自动配置简化了 Spring 应用的配置过程，减少了开发者的手动配置工作。
+嵌入式服务器：Spring Boot 可以打包应用为可执行 JAR 文件，并嵌入 Tomcat、Jetty 或 Undertow 等 Web 服务器。
+Starter 依赖：Spring Boot 提供了一系列预配置的 Starter 依赖，帮助快速集成常用功能。
+什么是 Spring 中的事务管理？如何配置声明式事务？
+
+答案：Spring 提供了声明式和编程式两种事务管理方式。声明式事务管理是通过注解或 XML 配置，自动管理事务的开始、提交和回滚。常见的配置方式有：
+使用 @Transactional 注解标记在方法或类上，Spring 会在该方法执行时自动开启事务，并在方法执行结束时提交或回滚事务。
+配置事务管理器（如 DataSourceTransactionManager）并在 XML 中声明事务属性。
+Spring 中的 Bean 生命周期是怎样的？
+
+答案：Spring 中的 Bean 生命周期包括以下步骤：
+实例化：Spring 容器通过反射创建 Bean 的实例。
+属性注入：Spring 容器通过依赖注入为 Bean 的属性赋值。
+BeanNameAware：如果 Bean 实现了 BeanNameAware 接口，Spring 会调用其 setBeanName() 方法传递 Bean 的名称。
+BeanFactoryAware：如果 Bean 实现了 BeanFactoryAware 接口，Spring 会调用其 setBeanFactory() 方法传递 BeanFactory 实例。
+InitializingBean：如果 Bean 实现了 InitializingBean 接口，Spring 会调用其 afterPropertiesSet() 方法。
+init-method：如果在 XML 配置或注解中指定了 init-method，Spring 会调用该初始化方法。
+使用 Bean：此时 Bean 已经准备好，可以被应用程序使用。
+销毁阶段：在应用程序关闭或 Bean 被移除时，如果实现了 DisposableBean 接口，Spring 会调用其 destroy() 方法，或调用配置的 destroy-method。
+Spring 中的 RestTemplate 是什么？它有哪些常用的方法？
+
+答案：RestTemplate 是 Spring 提供的用于与 RESTful Web 服务进行交互的工具类。它简化了与 HTTP 服务的通信。常用方法包括：
+getForObject()：从指定的 URL 获取资源，并将响应转换为指定的对象类型。
+postForObject()：向指定的 URL 发送请求并获取响应对象。
+exchange()：可以指定 HTTP 方法、请求头和请求体，进行更复杂的 HTTP 请求。
+delete()：从服务器删除指定的资源。
+Spring 中的 @Autowired 注解如何工作？它有哪些可选配置？
+
+答案：@Autowired 注解用于自动注入 Spring 容器中的 Bean。Spring 使用依赖注入的方式，将匹配的 Bean 注入到标注了 @Autowired 的字段、构造函数或 Setter 方法中。可选配置包括：
+required：默认为 true，表示如果无法找到匹配的 Bean，会抛出异常。设置为 false 则表示允许依赖为空。
+@Qualifier：与 @Autowired 一起使用，用于精确指定注入的 Bean。
+Spring 中的 @Component 和 @Bean 有什么区别？
+
+答案：@Component 是一个通用的 Spring 注解，通常用于将类标记为 Spring 容器管理的 Bean。@Bean 注解通常用于配置类中的方法，将其返回的对象注册为 Spring 容器中的 Bean。
+主要区别：
+@Component：通常用于标记类本身，Spring 会自动扫描并注册这些类为 Bean。
+@Bean：通常用于标记方法，将方法返回的对象手动注册为 Bean，适用于需要更多控制或外部库的对象创建。

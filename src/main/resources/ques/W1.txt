@@ -1,0 +1,262 @@
+1. SpringMVC 的主要组件有哪些？如何处理请求和响应？
+
+答案: SpringMVC 主要组件包括 DispatcherServlet、HandlerMapping、Controller、ViewResolver 和 ModelAndView。SpringMVC 使用 DispatcherServlet 作为前端控制器，通过 HandlerMapping 找到对应的控制器（Controller），再由控制器处理请求并返回 ModelAndView，最终通过 ViewResolver 解析视图并生成响应。
+请简要说明 MyBatis 的工作原理？
+
+2. 请简要说明 MyBatis 的工作原理？
+答案: MyBatis 是一个持久层框架，通过 XML 或注解的方式将 SQL 语句与 Java 对象进行映射。它将数据库操作抽象成接口，并通过动态生成代理类来执行这些接口中的 SQL 语句，将结果映射为 Java 对象返回。
+SVN 和 Git 有什么区别？你更喜欢使用哪个？为什么？
+
+### SVN 和 Git 有什么区别？你更喜欢使用哪个？为什么？
+答案: SVN 是集中式版本控制系统，而 Git 是分布式版本控制系统。Git 提供更好的分支管理和离线工作能力。一般来说，开发者更喜欢使用 Git，因为它提供了更灵活和高效的版本控制。
+你如何在Spring中配置数据源？
+
+### 你如何在Spring中配置数据源？
+答案: 在 Spring 中可以通过配置文件（如 application.properties 或 application.yml）配置数据源，也可以通过 Java 配置类使用 DataSource 接口配置。通常使用 @Configuration 配合 @Bean 注解来定义数据源的 Bean。
+解释你在项目中如何使用 Feign 来实现 REST 调用？
+
+### 解释你在项目中如何使用 Feign 来实现 REST 调用？
+答案: Feign 是 Spring Cloud 提供的一个声明式 HTTP 客户端，可以通过定义接口的方式实现 REST 调用。只需要在接口上使用 @FeignClient 注解，并在方法上声明具体的请求方式（如 @GetMapping、@PostMapping 等），Feign 会自动生成实现类并进行调用。
+你是如何在 SpringCloud 中实现微服务之间的通信的？
+
+### 你是如何在 SpringCloud 中实现微服务之间的通信的？
+答案: 在 Spring Cloud 中，微服务之间的通信通常通过 Feign 客户端或 RestTemplate 实现。Feign 提供了声明式的 HTTP 调用方式，而 RestTemplate 则是更为传统的 REST 客户端工具。两者都可以使用 Eureka 或 Consul 进行服务发现和负载均衡。
+什么是 Oracle 的索引？它们的主要作用是什么？
+
+### 什么是 Oracle 的索引？它们的主要作用是什么？
+答案: Oracle 的索引是一种加速数据检索的数据库对象。通过索引，Oracle 可以快速找到指定记录，减少全表扫描。常见的索引类型包括 B 树索引、位图索引、唯一索引等。
+你在项目中如何使用 Thymeleaf 模板引擎？
+
+### 你在项目中如何使用 Thymeleaf 模板引擎？
+答案: Thymeleaf 是一个现代的服务器端 Java 模板引擎，常用于 Spring MVC 中。它可以直接在 HTML 文件中编写标签和表达式，用于数据绑定、条件判断、循环等。在项目中，可以通过 Model 对象传递数据到 Thymeleaf 页面，Thymeleaf 会将数据渲染到 HTML 中。
+什么是 Redis？在项目中如何使用它？
+
+### 什么是 Redis？在项目中如何使用它？
+答案: Redis 是一个开源的内存数据结构存储，用作数据库、缓存、消息代理等。它支持多种数据结构如字符串、哈希、列表、集合等。在项目中，Redis 常用于缓存数据、会话管理、消息队列等场景。可以通过 Spring Data Redis 来与 Redis 进行交互。
+请描述一下 Sharding-JDBC 的基本使用场景？
+
+### 请描述一下 Sharding-JDBC 的基本使用场景？
+答案: Sharding-JDBC 是一个分库分表的中间件，适用于大规模数据场景下的数据库分片。典型的使用场景包括电商系统、金融系统等，使用 Sharding-JDBC 可以对数据库进行水平拆分（Sharding）以提高系统的扩展性和性能。
+中等难度问题
+你在项目中如何设计和实现分布式事务？
+
+### 你在项目中如何设计和实现分布式事务？
+答案: 分布式事务的设计通常涉及到多个微服务或多个数据库实例。可以使用 TCC（Try-Confirm-Cancel）模式、Saga 模式或者通过分布式事务管理器如 Seata 来实现。通常在分布式环境下，不推荐强一致性，而是采用最终一致性来保证事务的可靠性。
+
+追问1：你遇到过分布式事务失败的情况吗？是如何处理的？
+答案: 遇到过在网络延迟或服务宕机导致的事务失败情况。处理方式通常是通过重试机制、补偿机制或人工干预来解决。
+
+追问2：在Spring中如何集成分布式事务管理器？
+答案: 可以使用 Spring Cloud Alibaba 提供的 Seata 作为分布式事务管理器，在 Spring Boot 项目中，通过 @GlobalTransactional 注解来管理全局事务。
+请详细说明 MyBatis-Plus 与 MyBatis 的区别？
+
+### 请详细说明 MyBatis-Plus 与 MyBatis 的区别？
+答案: MyBatis-Plus 是 MyBatis 的增强版，提供了很多开箱即用的功能，如 CRUD 接口、分页插件、逻辑删除、代码生成等，简化了开发工作。与 MyBatis 不同的是，MyBatis-Plus 提供了很多默认实现，减少了重复代码的编写。
+
+追问1：你如何在 MyBatis-Plus 中进行复杂的查询？
+答案: 在 MyBatis-Plus 中，可以通过 QueryWrapper 类进行复杂查询，如多条件查询、排序、分组等。还可以通过自定义 SQL 语句来实现更复杂的查询逻辑。
+
+追问2：MyBatis-Plus 中如何进行自动代码生成？
+答案: MyBatis-Plus 提供了代码生成器 AutoGenerator，可以通过配置数据库连接信息、表名、模板等自动生成实体类、Mapper 接口、Service 和 Controller 等代码。
+
+### 如何优化使用 React 的前端性能？
+答案: 优化 React 前端性能的方法包括：避免不必要的重新渲染，使用 React.memo 和 useMemo 进行组件优化，减少组件的状态更新，按需加载组件和路由，使用虚拟滚动优化长列表渲染，避免过多的事件绑定等。
+
+追问1：你是否使用过任何性能监控工具来分析 React 应用的性能问题？是什么工具？
+答案: 使用过 Chrome DevTools 和 React Profiler 来分析 React 应用的性能问题。Chrome DevTools 可以查看组件的渲染时间，React Profiler 则可以详细分析每个组件的渲染性能。
+追问2：在使用 Antd 时，如何按需加载组件以提高性能？
+答案: 可以通过使用 babel-plugin-import 插件来按需加载 Antd 组件。通过配置 Babel 插件，只引入所需的组件及其样式，避免引入整个库，提高加载和渲染性能。
+
+### 请详细说明你在项目中如何使用 Sharding-JDBC 实现分库分表？
+
+答案: 在项目中，Sharding-JDBC 可以通过配置 sharding-rules（如分片键、分片算法等）来实现分库分表。通常需要配置多个数据源和表，并定义数据分片规则以实现数据的水平拆分。分片规则可以基于时间、地理位置等字段。
+
+追问1：你遇到过分库分表后数据不一致的问题吗？如何解决？
+答案: 遇到过数据同步延迟导致的数据不一致问题。通常通过定时任务或异步同步机制来解决此类问题，确保数据最终一致性。
+追问2：Sharding-JDBC 的配置有哪些注意事项？
+答案: Sharding-JDBC 配置时需要注意分片键的选择、数据源和表的映射、分片算法的合理性。此外，还需考虑数据迁移、扩展性、性能等方面的问题。
+
+### 请解释你是如何设计 RESTful API 的？在你的项目中是否遇到过版本管理的问题？如何解决？
+
+答案: 设计 RESTful API 时，通常遵循 REST 的设计原则，如使用标准的 HTTP 方法（GET、POST、PUT、DELETE）、清晰的 URI 命名、状态码和错误处理等。在项目中，可以通过在 URI 中加入版本号（如 /api/v1/）或使用自定义请求头来管理 API 版本。
+
+追问1：如何确保 RESTful API 的安全性？
+答案: 可以通过使用 HTTPS 传输协议、身份认证（如 OAuth2）、API 请求限流、数据加密和审计日志等方式来确保 RESTful API 的安全性。
+追问2：你如何处理 RESTful API 中的分页和排序？
+答案: 在 RESTful API 中，分页和排序通常通过请求参数来实现。例如，分页可以使用 page 和 size 参数，排序可以使用 sort 参数指定排序字段和顺序。服务器端处理请求时，根据这些参数构造 SQL 查询，返回分页和排序后的结果集。
+
+### 在你参与的项目中，如何使用 SpringCloud 进行微服务的熔断和降级？
+答案: 在 Spring Cloud 中，可以使用 Hystrix 或 Resilience4j 来实现熔断和降级。通过配置熔断器，当某个服务出现故障或响应时间过长时，可以快速失败，并调用降级方法提供默认值或备用方案，以提高系统的稳定性。
+
+追问1：你在什么情况下决定使用熔断器？
+答案: 当某个微服务的调用频繁出现失败、响应时间超过阈值、或者有可能导致整个系统的级联故障时，会决定使用熔断器。
+追问2：熔断器的配置有哪些关键参数？
+答案: 熔断器的关键配置参数包括：熔断开启的失败率阈值、时间窗口大小、断路器恢复时间（半开状态）、最大并发请求数等。
+
+### 在开发 EAST4.0 系统时，如何确保数据的一致性？
+答案: 为确保数据一致性，可以使用事务管理、乐观锁或悲观锁机制。对于分布式系统，可以采用分布式事务管理（如 TCC、Saga 模式），或者通过事件驱动架构实现最终一致性。此外，定期的数据校验和同步也是重要手段。
+
+追问1：你是如何处理高并发下的数据一致性的？
+
+答案: 高并发下可以通过使用乐观锁或基于版本号的机制来处理数据一致性，防止并发更新带来的冲突。此外，还可以使用分布式锁或消息队列来顺序处理关键操作。
+追问2：在数据同步过程中，如何避免数据丢失？
+
+答案: 可以使用可靠的消息传递机制（如使用 Kafka 进行消息持久化）、数据校验和重试机制来避免数据丢失。此外，保持同步过程中的幂等性设计也有助于防止数据丢失。
+
+18. 请详细说明在项目中使用 Nginx 进行负载均衡的过程？
+
+答案: Nginx 作为反向代理服务器，可以通过配置负载均衡策略（如轮询、最少连接、IP 哈希等）将请求分发到不同的后端服务器。Nginx 还可以配置健康检查功能，确保只将请求转发到健康的服务器上。
+
+追问1：你是如何配置 Nginx 的反向代理的？
+答案: 通过在 Nginx 配置文件中使用 proxy_pass 指令，可以将请求代理到后端服务器。可以结合 location 指令匹配 URI，并配置缓存、超时、限速等参数。
+追问2：Nginx 的负载均衡策略有哪些？你使用过哪种？
+答案: Nginx 支持轮询（默认策略）、最少连接、IP 哈希等负载均衡策略。常用的是轮询策略，它将请求均匀地分配到后端服务器上。
+
+19.如何在 Oracle 中进行性能调优？
+
+答案: Oracle 性能调优可以从多个方面入手，包括优化 SQL 查询（如使用合适的索引）、调整数据库参数、使用分区技术、监控和调优内存（如 SGA、PGA）、减少锁争用等。通常会使用 Oracle 提供的性能分析工具，如 AWR（Automatic Workload Repository）和 SQL Tuning Advisor。
+
+追问1：你使用过哪些性能调优工具？效果如何？
+答案: 常用的性能调优工具包括 Oracle 的 AWR 报告、SQL Trace、TKPROF、SQL Tuning Advisor 等。这些工具可以帮助识别性能瓶颈并提供优化建议，通常效果显著。
+追问2：你在 Oracle 中遇到过哪些性能瓶颈？如何解决的？
+答案: 常见的性能瓶颈包括慢查询、锁争用、内存不足等。可以通过优化 SQL 语句、增加合适的索引、分区表、调整数据库参数（如内存分配）来解决。
+
+20. 请描述你在项目中如何处理日志管理和分析的？
+
+答案: 日志管理通常通过使用集中化的日志收集工具（如 ELK Stack：Elasticsearch、Logstash、Kibana）来收集、存储和分析日志。日志记录时会包含重要的上下文信息，如请求 ID、时间戳、用户信息等，以便后续分析。日志分析用于监控系统状态、检测异常、审计等。
+
+追问1：你使用了哪些日志管理工具？
+答案: 使用过 ELK Stack、Graylog、Splunk 等工具。ELK Stack 是一个常用的开源解决方案，提供强大的日志搜索、分析和可视化功能。
+追问2：在高并发系统中，如何保证日志的可靠性？
+答案: 在高并发系统中，可以使用异步日志记录（如 Log4j2 的异步 appender），将日志写入独立的日志服务或消息队列，减少对应用性能的影响。此外，还可以使用批量写入、日志分片等技术来提高日志的可靠性。
+
+21. 在大型分布式系统中，如何设计一个高可用的缓存系统？
+
+答案: 一个高可用的缓存系统设计需要考虑数据一致性、容灾能力、横向扩展性和性能等。可以使用分布式缓存（如 Redis 集群）进行数据的横向扩展，并通过主从复制、哨兵模式或集群模式实现高可用性。使用一致性哈希算法来避免缓存节点故障导致的大规模缓存失效。
+
+追问1：你如何处理缓存中的数据一致性问题？
+答案: 可以使用缓存淘汰策略（如 LRU）、缓存预热、读写分离等方式减少数据不一致的情况。对于强一致性要求的数据，可以采用双写一致性策略，或使用缓存旁路模式，确保缓存和数据库的数据同步。
+追问2：当缓存击穿、穿透和雪崩发生时，你会如何应对？
+答案:
+缓存击穿：使用互斥锁或加载保护机制，确保只有一个线程去加载缓存。
+缓存穿透：使用布隆过滤器防止无效请求直接访问数据库，或者对不存在的请求返回默认值并缓存。
+缓存雪崩：通过缓存过期时间的随机化、异步重构缓存、使用多级缓存（如本地缓存+分布式缓存）来减轻雪崩效应。
+
+22. 如何在 Spring 中实现 AOP ？AOP 的底层原理是什么？
+
+答案: 在 Spring 中，可以通过 @Aspect 注解和 @EnableAspectJAutoProxy 注解来实现 AOP。AOP 的底层原理是通过动态代理（JDK 动态代理或 CGLIB 代理）来拦截方法调用，并在方法执行前后加入横切逻辑。
+
+追问1：请举例说明你在项目中使用 AOP 的场景。
+答案: 在项目中，AOP 常用于日志记录、事务管理、权限检查、性能监控等场景。比如，在某些服务方法调用前后记录日志，监控方法执行时间，自动处理异常等。
+追问2：如何避免 AOP 影响系统性能？
+答案: 可以通过合理使用切面、尽量减少切面中执行的逻辑来避免性能损耗。对于性能敏感的操作，可以采用条件判断或动态决定是否执行切面逻辑。此外，可以使用 Spring 的 @Profile 注解来控制切面在不同环境下的启用。
+
+23. 如何实现高并发的文件上传和下载？
+
+答案: 可以通过使用异步 I/O、多线程、分块上传和下载、断点续传、分布式文件系统（如 FastDFS、HDFS）等技术来实现高并发的文件上传和下载。使用 Nginx 作为前端代理，结合后端的高效 I/O 处理，可以提高系统的并发处理能力。
+
+追问1：如何处理大文件的断点续传？
+答案: 断点续传通常通过将文件分块上传，记录每个分块的上传进度。当传输中断时，客户端只需从上次中断的位置继续上传剩余的分块。这可以通过在服务器端存储上传进度的记录或通过客户端发送已上传的分块信息来实现。
+
+追问2：在文件上传过程中，如何确保文件的完整性？
+答案: 为了确保文件完整性，可以在上传前后计算文件的校验码（如 MD5、SHA），并在上传完成后对比服务器端和客户端的校验码，确保文件没有被篡改或损坏。如果校验不通过，可以重新上传有问题的部分或整个文件。
+
+24. 解释微服务架构下的数据一致性挑战，以及你采取了哪些措施来解决这些挑战？
+
+答案: 微服务架构下的数据一致性挑战主要体现在多个服务之间的数据同步和事务处理上，传统的单体架构中的 ACID 特性在微服务中难以直接实现。为解决这些问题，可以采取以下措施：使用分布式事务管理（如 TCC、Saga 模式）、事件驱动架构（通过消息队列确保最终一致性）、数据冗余设计（在不同服务中存储相同数据）等。
+
+追问1：请解释 CAP 定理在微服务中的应用。
+答案: CAP 定理表明在分布式系统中，不可能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition tolerance）。在微服务中通常会优先保证分区容错性，进而根据业务需求在一致性和可用性之间进行权衡。大多数情况下，会选择弱一致性和最终一致性，以确保系统的高可用性。
+追问2：你在项目中如何实现微服务间的最终一致性？
+答案: 最终一致性通常通过事件驱动架构实现。例如，可以使用消息队列（如 Kafka、RabbitMQ）在服务之间传递消息，确保数据最终到达并处理。每个服务处理消息时都会记录状态，保证在重试或补偿机制下最终达到一致性。
+
+25. 你是如何设计和优化数据库的分区方案的？
+
+答案: 设计数据库分区方案时，需考虑分区键的选择（通常是访问频繁的字段，如时间戳、用户ID等）、分区类型（如水平分区、垂直分区）、以及分区的大小和数量。优化时需确保分区键能够均匀分布数据，减少热点问题，并使用合适的索引来优化查询性能。
+
+追问1：在什么情况下你会选择垂直分区？什么时候选择水平分区？
+答案: 当表中存在大量字段，且部分字段很少访问时，通常会选择垂直分区（将少访问的字段拆分到其他表）。而水平分区适用于数据量大且增长迅速的场景，通过将数据按行拆分到多个分区来提高查询性能和并发处理能力。
+追问2：你是如何处理跨分区查询的？
+答案: 跨分区查询可以通过分区键的联合索引来优化，确保查询尽可能在单个分区内完成。如果无法避免跨分区查询，则需在查询语句中显式指定分区键，减少全表扫描。此外，还可以通过缓存或数据冗余来减少跨分区查询的频率。
+
+26. 如何在微服务架构中实现跨服务的事务处理？
+
+答案: 在微服务架构中，跨服务的事务处理通常通过 Saga 模式或 TCC 模式来实现。Saga 模式通过一系列的独立操作来完成事务，并通过补偿操作来处理失败。TCC 模式通过预留资源（Try）、确认操作（Confirm）和取消操作（Cancel）来保证事务的完成。
+
+追问1：解释一下 TCC（Try-Confirm-Cancel） 模式。
+答案: TCC 模式分为三个阶段：Try 阶段尝试执行操作并预留资源，Confirm 阶段在所有操作成功时确认执行并提交事务，Cancel 阶段在任何操作失败时取消执行并释放资源。TCC 模式适用于需要严格事务管理的场景，确保操作的最终一致性。
+追问2：你在项目中如何解决分布式事务带来的性能开销问题？
+答案: 可以通过异步处理、减少锁粒度、使用幂等操作等方法来减轻分布式事务的性能开销。此外，尽量将事务的范围缩小到单个微服务内部，使用事件驱动和最终一致性来替代分布式事务，从而提高系统性能。
+
+27. 解释你在项目中如何进行 CI/CD 的自动化流程设计？
+
+答案: CI/CD 自动化流程通常包括代码的持续集成、自动化测试、构建、发布和部署。在设计过程中，使用工具如 Jenkins、GitLab CI、Travis CI 等，配置代码库的 Webhook 触发流水线，自动拉取最新代码、运行测试、生成构建工件，并将工件部署到目标环境。
+
+追问1：你用过哪些 CI/CD 工具？它们的优缺点是什么？
+
+答案: 使用过 Jenkins、GitLab CI、Travis CI 等。Jenkins 的优点是插件丰富、可扩展性强，但需要更多的配置和维护；GitLab CI 与 GitLab 无缝集成，简单易用，适合小团队使用；Travis CI 支持多种语言和环境，但在免费版中资源有限。
+追问2：如何确保自动化部署过程中的安全性？
+
+答案: 可以通过配置部署密钥、使用环境变量存储敏感信息、严格的访问控制和审计日志等方式确保自动化部署过程中的安全性。此外，还可以通过部署前的静态代码分析和测试来确保代码质量和安全性。
+
+28. 你如何设计一个高性能的报表系统？
+
+答案: 设计高性能报表系统时，可以通过以下策略：使用缓存技术（如 Redis）加速常用报表的生成，提前计算复杂的聚合数据，使用异步处理和分页技术提高响应速度，选择高效的数据库查询和索引优化报表生成过程。
+
+追问1：如何处理报表系统中的数据延迟问题？
+
+答案: 数据延迟问题可以通过数据预计算、定时任务刷新缓存、异步生成报表等方法来处理。对于实时性要求较高的报表，可以通过流式处理技术实时更新数据。
+追问2：当用户量激增时，如何保证报表系统的响应速度？
+
+答案: 当用户量激增时，可以通过水平扩展报表生成服务、使用负载均衡分发请求、增加缓存层、优化数据库查询以及使用分页加载和懒加载技术来提高系统的响应速度。
+
+29. 如何设计和实现一个健壮的权限管理系统？
+
+答案: 权限管理系统的设计通常基于 RBAC（基于角色的访问控制）或 ABAC（基于属性的访问控制）模型。首先定义角色、权限和用户的关系，设计灵活的权限分配机制。权限管理系统应支持细粒度的权限控制、审计和日志记录，并通过统一的身份验证机制（如 OAuth2）确保安全性。
+
+追问1：请解释 RBAC（基于角色的访问控制）和 ABAC（基于属性的访问控制）的区别。
+
+答案: RBAC 基于用户的角色来分配权限，每个角色对应一组权限。ABAC 则基于用户、资源、环境等属性来动态计算权限，权限控制更为灵活细腻。RBAC 适用于相对固定的权限模型，而 ABAC 更适合复杂、多变的权限需求。
+追问2：在高并发情况下，如何保证权限系统的稳定性和安全性？
+
+答案: 在高并发情况下，可以通过缓存用户权限信息、使用无状态令牌（如 JWT）、优化权限验证算法、以及进行限流和分布式锁等技术来保证权限系统的稳定性和安全性。
+
+30. 在金融系统中，如何设计和实现实时交易数据的处理？
+
+答案: 实时交易数据处理要求系统具备低延迟、高吞吐量和强一致性。可以采用流式处理技术（如 Kafka、Flink）来实时消费和处理交易数据，结合内存数据库（如 Redis）和分布式数据库来存储和查询数据，使用分布式事务或事件驱动架构确保数据一致性。
+
+追问1：如何处理实时交易中的延迟问题？
+答案: 处理实时交易中的延迟问题可以通过以下方式：使用高性能的消息队列（如 Kafka）来确保数据的高效传输；使用内存数据库（如 Redis）来降低查询和写入的延迟；优化网络和I/O操作，减少网络传输和磁盘读写的瓶颈；以及通过异步处理和流式计算来实时处理数据，避免阻塞操作。
+
+追问2：当遇到系统故障时，如何保证交易数据的完整性和一致性？
+答案: 为了在系统故障时保证交易数据的完整性和一致性，可以使用分布式事务管理（如 TCC 模式）确保跨服务的事务一致性；引入幂等操作和事务日志，防止数据重复处理；使用消息队列的持久化功能确保消息不会丢失；以及在故障恢复时进行数据对账和校验，确保恢复过程中数据的一致性。
+
+1. Can you explain the concept of microservices?
+Answer: Microservices is an architectural style that structures an application as a collection of loosely coupled services. Each service is self-contained and focuses on a specific business capability, which can be developed, deployed, and scaled independently.
+
+Follow-up: What are the challenges you faced when working with microservices?
+Answer: Common challenges include managing inter-service communication, ensuring data consistency across services, handling distributed transactions, dealing with latency and fault tolerance, and the complexity of orchestrating and monitoring multiple services.
+
+2. How do you handle exceptions in Java?
+Answer: In Java, exceptions are handled using try-catch blocks, where the code that may throw an exception is placed inside a try block, and the exception handling logic is placed inside the catch block. Finally blocks can be used to execute code that should run regardless of whether an exception occurs.
+
+Follow-up: Can you provide an example of a custom exception you have created?
+Answer: Yes, I created a custom exception called InvalidTransactionException, which extends RuntimeException. It is thrown when a transaction doesn't meet certain validation criteria. The custom exception includes additional context information such as the transaction ID and a detailed error message.
+
+3. What are the differences between RESTful and SOAP web services?
+Answer: RESTful web services use HTTP methods explicitly and focus on resources identified by URIs. They are stateless and often return data in formats like JSON or XML. SOAP is a protocol that defines a strict set of rules for structuring messages, and it can work over a variety of transport protocols. SOAP is more rigid but provides built-in error handling and security features.
+
+Follow-up: Which one do you prefer and why?
+Answer: I prefer RESTful web services for their simplicity, scalability, and ease of use. RESTful services are easier to integrate with modern web applications, especially when dealing with JSON data and can be more efficient due to their lightweight nature. However, for scenarios requiring strict standards or advanced security features, SOAP may be a better choice.
+
+4. Describe a situation where you had to optimize a piece of code.
+Answer: I once optimized a piece of code responsible for processing large datasets in a loop. The original code used nested loops that caused performance bottlenecks. I refactored it to use a more efficient data structure, reducing the time complexity from O(n^2) to O(n log n), which significantly improved performance.
+
+Follow-up: What tools did you use to identify the performance issues?
+Answer: I used profiling tools like VisualVM and JProfiler to identify the hotspots in the code, where most of the processing time was spent. These tools helped me to focus on optimizing the most resource-intensive parts of the code.
+
+5. Can you explain how garbage collection works in Java?
+Answer: Garbage collection in Java is an automatic memory management process. The JVM periodically scans the heap to identify objects that are no longer referenced by any part of the application, marking them as eligible for garbage collection. The garbage collector then reclaims the memory occupied by these objects, making it available for new objects.
+
+Follow-up: How does garbage collection impact application performance?
+Answer: Garbage collection can impact application performance by introducing pauses when the garbage collector runs, especially in applications with large memory usage or complex object graphs. To mitigate this, different garbage collection algorithms (like G1, CMS, or ZGC) can be chosen based on the application's needs, and JVM tuning can be applied to optimize garbage collection performance.

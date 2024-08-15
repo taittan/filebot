@@ -1,0 +1,225 @@
+你使用过 Java 中的 Stream API 吗？请解释 map() 和 collect() 方法的作用。
+tream API：
+
+Java 8 引入的 Stream API 是用于处理数据集合的强大工具。它允许对集合进行声明性操作（如过滤、映射、排序、聚合等），并支持链式操作和并行处理。
+
+map() 方法：
+
+map() 是一个中间操作，用于将 Stream 中的每个元素应用一个函数，并将其转换为另一个形式。通常用于将对象转换为另一种类型或提取对象的某个属性。例如，将用户列表转换为用户的名称列表：
+List<String> names = users.stream()
+                          .map(User::getName)
+                          .collect(Collectors.toList());
+
+collect() 方法：
+
+collect() 是一个终端操作，用于将 Stream 中的元素汇聚成一个结果。它通常与 Collectors 工具类结合使用，将 Stream 转换为集合、列表、字符串等。例如，使用 collect(Collectors.toList()) 将处理后的元素收集到一个列表中：
+List<String> nameList = users.stream()
+                             .map(User::getName)
+                             .collect(Collectors.toList());
+
+map() 与 flatMap() 有什么区别？
+
+map()：将 Stream 中的每个元素映射成另外一个元素，操作后的 Stream 结构不变。适用于一对一映射或转换。
+flatMap()：将 Stream 中的每个元素映射成一个新的 Stream，然后将这些子流压平合并成一个流。适用于一对多映射或将嵌套结构扁平化。
+
+使用 map()：当需要对 Stream 中的元素进行简单的转换，如将对象的某个属性提取出来，或将元素转换为另一种类型。
+使用 flatMap()：当需要将嵌套的 Stream 结构扁平化，如处理包含集合的集合，或者希望从每个元素生成多个元素并将它们合并成一个流。
+
+
+什么时候会用到 parallelStream()，与 stream() 有什么区别？
+stream() 与 parallelStream() 的区别
+stream()：
+
+stream() 是 Java 8 中引入的用于处理集合数据的顺序流。使用 stream() 处理数据时，各个操作（如 filter、map 等）是按顺序执行的，处理的每个元素按插入顺序进行，操作通常在单线程环境下执行。
+使用场景：适用于不涉及大量计算的场景，或者处理顺序非常重要的场景。
+parallelStream()：
+
+parallelStream() 是用于处理集合数据的并行流。与 stream() 不同，parallelStream() 会将数据划分为多个子任务，并在多个线程上并行处理，从而加速处理过程。操作的顺序不一定按照插入顺序进行，最终结果的顺序可能与原始集合不同。
+使用场景：适用于需要处理大量数据或计算密集型任务，且任务之间独立、不依赖顺序的场景。例如，在需要对大数据集进行 CPU 密集型计算时，parallelStream() 可以利用多核 CPU 提高处理速度。
+
+import java.util.Arrays;
+import java.util.List;
+
+public class StreamExample {
+
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+        // 使用 stream() 顺序处理
+        System.out.println("Using stream():");
+        numbers.stream()
+               .forEach(System.out::println);
+
+        // 使用 parallelStream() 并行处理
+        System.out.println("Using parallelStream():");
+        numbers.parallelStream()
+               .forEach(System.out::println);
+    }
+}
+在这个例子中：
+
+stream()：会按顺序输出数字 1 到 10。
+parallelStream()：输出的顺序可能是不确定的，取决于并行处理的线程调度。
+何时使用 parallelStream()？
+数据量较大：当需要处理非常大的集合时，并行流可以通过利用多核 CPU 并行执行操作来提高性能。
+计算密集型任务：当处理的任务是计算密集型的，并且各个元素的处理是独立的（彼此之间没有依赖关系），使用 parallelStream() 可以显著减少处理时间。
+无顺序要求：如果对结果的顺序没有要求，或顺序不重要，可以使用 parallelStream() 来加速处理。
+注意事项
+并行流的开销：尽管并行流在处理大数据集或计算密集型任务时可能更快，但它也有一些开销，如线程管理和上下文切换。因此，在处理小数据集时，parallelStream() 可能不会比顺序流更快。
+线程安全：在并行流中操作的代码应当是线程安全的，尤其是在使用共享资源时。否则，可能会导致不可预测的结果。
+总结
+stream() 适用于顺序处理和对处理顺序有要求的场景。
+parallelStream() 适用于大数据量、计算密集型、且不依赖处理顺序的场景，并可以利用多核 CPU 提升性能。但在使用时需要注意线程安全性和并行处理的开销
+
+
+
+
+什么是 Java 的异常处理机制？throw 与 throws 有什么区别？
+答案：Java 的异常处理机制通过 try-catch-finally 块来捕获和处理异常。throw 是用来主动抛出异常的语句，可以在方法内部使用，抛出一个异常实例。throws 是方法签名的一部分，用来声明该方法可能抛出的异常类型，表示调用该方法时需要处理这些异常。两者的区别在于：
+throw：用于方法内部，实际抛出一个异常实例。
+throws：用于方法声明中，声明该方法可能抛出的异常类型。
+
+
+
+解释 Java 中的反射（Reflection）机制及其用途。
+答案：反射是一种允许程序在运行时获取有关类、方法、字段和构造函数等信息的机制，并能够动态地调用方法或访问字段。反射在 Java 中提供了很大的灵活性，允许在运行时检查和操作类的结构。
+框架设计：如 Spring 和 Hibernate，通过反射动态注入依赖和执行方法。
+调试和测试工具：通过反射可以创建更通用的测试工具和框架。
+动态代理：Java 的动态代理机制依赖于反射。
+构建通用的序列化和反序列化工具。
+
+
+解释 Java 中的类加载器（ClassLoader）及其作用。
+答案：类加载器是 Java 虚拟机中负责动态加载类的组件。它将类文件加载到 JVM 中，并在运行时将它们转换为内存中的类对象。Java 中的类加载器遵循双亲委派模型（Parent Delegation Model），即一个类加载请求会先向父加载器委派，父加载器无法加载时，才由当前类加载器进行加载。
+主要类型：
+Bootstrap ClassLoader：加载核心类库，如 java.lang.* 包。
+Extension ClassLoader：加载扩展类库，如 JAVA_HOME/lib/ext 目录中的类。
+Application ClassLoader：加载应用程序类路径中的类，通常为用户定义的类和库。
+作用：
+隔离性：不同的类加载器可以隔离命名空间，使得同一名称的类可以在不同的类加载器中加载，从而互不干扰。
+动态加载：类加载器支持在运行时加载类，特别是在反射和动态代理中使用。
+定制化：开发者可以自定义类加载器，以便从非标准位置加载类，如从网络、数据库等加载类。
+
+
+如果我springboot项目中有一个类，我项目的依赖包中也有一个同名的类，包名也是相同的，项目运行的时候会怎么样啊？
+
+如果依赖包中也有一个 com.example.myapp.service.MyService 类，情况可能如下：
+
+类路径优先级：由于 Spring Boot 项目会优先加载主类路径下的类，因此 com.example.myapp.service.MyService 中你自己定义的类会被优先加载。
+包扫描机制：Spring Boot 会从 com.example.myapp 包开始扫描，由于 MyService 位于主应用类所在的包或其子包中，它会被扫描到并注册为 Bean，而不是依赖包中的 MyService。
+
+如何验证
+你可以通过以下方式验证类的加载顺序：
+
+查看 Spring Boot 启动日志：在 Spring Boot 启动日志中，通常会记录哪些 Bean 被加载和初始化。如果项目中的类被加载，日志中会显示相应的类名和所在包路径。
+
+使用 @Primary 和 @Qualifier：
+
+如果确实存在同名类，并且需要明确使用某个特定的类，可以通过 @Primary 注解指定一个 Bean 为首选，或使用 @Qualifier 注解在注入时指定具体的 Bean。
+调试或打印类加载器信息：
+
+你可以在类的静态初始化块或构造函数中打印出类加载器信息
+public class MyService {
+    static {
+        System.out.println("Class loaded by: " + MyService.class.getClassLoader());
+    }
+}
+这样你可以看到是哪个类加载器加载了这个类。
+
+在你的 Spring Boot 项目中，项目中的类之所以被加载而不是依赖包中的类，主要是因为类路径优先级、Spring Boot 的包扫描机制和自动配置条件的综合作用。这些机制使得应用程序的主类路径下的类优先于依赖包中的类被加载和使用。
+
+
+在 Maven 中，pom.xml 文件中定义的依赖确实有其加载和解析的顺序，不过这种顺序更多是基于 Maven 的依赖解析规则和优先级，而不是文件中定义的顺序。这些规则主要包括以下几个方面：
+1. 直接依赖的顺序
+定义顺序：在 pom.xml 中，直接依赖项的定义顺序通常不会影响项目的构建顺序。Maven 会根据所有依赖项的版本、作用域等信息进行解析，依赖关系本身的定义顺序不会影响最终的构建结果。
+版本解析：如果同一依赖项在 pom.xml 中被多次声明（可能通过继承或聚合方式引入），Maven 会使用第一个被解析到的版本，而不是按照定义顺序来决定使用哪个版本。
+2. 依赖管理的优先级
+Maven 有一套依赖管理优先级规则，决定了在面对版本冲突时应该使用哪个版本的依赖。以下是 Maven 处理依赖关系时的几种情况：
+
+直接依赖优先：如果一个依赖在 pom.xml 中直接声明，Maven 会优先选择这个版本，而忽略通过传递依赖（transitive dependency）引入的版本。
+传递依赖：Maven 通过解析项目的传递依赖来构建依赖树，如果依赖树中存在同一依赖的多个版本，Maven 会根据传递依赖的深度优先选择较浅的路径（也就是离根节点最近的依赖版本）。
+最短路径优先：如果一个依赖在多条路径中被传递引入，Maven 会选择最短路径（即距离最短的路径）中定义的版本。
+3. 依赖调解（Dependency Mediation）
+当一个项目中存在多个版本的相同依赖时，Maven 使用 最短路径优先原则 和 直接依赖优先原则 来调解依赖版本的冲突。具体来说：
+
+最短路径：Maven 会优先选择距离项目根节点路径最短的版本。即在构建依赖树时，首先找到的版本优先。
+直接依赖优先：如果某个依赖是直接在 pom.xml 中声明的，那么这个版本将优先于通过传递依赖引入的版本。
+4. 依赖范围（Scope）
+Maven 支持不同的依赖范围（如 compile、test、provided、runtime），这些范围决定了依赖在编译、测试和运行时的可用性。依赖范围也可能影响到最终的依赖解析。
+Compile：默认范围，在编译、测试、运行时都可用。
+Provided：类似于 compile，但不会包含在打包中，通常由运行时环境提供（如 servlet-api）。
+Runtime：在编译时不可用，但在运行时和测试时可用。
+Test：仅在测试编译和测试运行时可用。
+5. 依赖管理（Dependency Management）
+在多模块项目或父 POM 中，通常使用 <dependencyManagement> 来集中管理版本。子模块在引入依赖时，如果没有指定版本，Maven 会使用 dependencyManagement 中定义的版本。
+版本锁定：dependencyManagement 可以锁定依赖版本，避免子模块中出现版本不一致的问题。
+6. 继承和聚合的影响
+继承：如果你的项目继承了一个父 POM，父 POM 中的依赖会首先被解析，然后再解析子 POM 中的依赖。
+聚合：在多模块项目中，父模块通常不会自动继承子模块的依赖。每个子模块需要明确声明它们所需的依赖。
+总结
+依赖定义顺序：pom.xml 中定义的依赖项顺序通常不会影响构建的结果，Maven 会根据依赖的深度、直接依赖的优先级等规则进行解析。
+依赖调解规则：当存在版本冲突时，Maven 会优先选择最短路径和直接依赖的版本。
+依赖管理和继承：通过 dependencyManagement 进行版本管理，并通过继承父 POM 来统一依赖版本。
+理解这些规则有助于避免依赖冲突，并正确管理项目中的依赖。
+
+
+Java 中的 Serializable 接口是什么？为什么需要它？
+Serializable 是一个标记接口（不包含任何方法），它表示一个类的对象可以被序列化。序列化是指将对象的状态转换为字节流的过程，以便可以将对象写入文件、数据库，或通过网络传输。反序列化是将字节流转换回对象的过程。
+为什么需要序列化：
+持久化：将对象的状态保存到存储设备中，例如保存到文件或数据库，以便在程序运行结束后能够恢复该对象。
+网络传输：在分布式系统中，需要通过网络将对象从一个 JVM 传输到另一个 JVM，这时需要将对象序列化为字节流。
+深度克隆：通过序列化和反序列化可以实现对象的深度克隆
+
+java 中的参数 是值传递还是引用传递
+Java 中的参数传递是：
+值传递（Pass-by-Value）。
+
+基本数据类型（如 int、float、boolean 等）：
+当你将基本数据类型作为参数传递给方法时，传递的是该值的副本。因此，方法内对参数的修改不会影响到原始变量。
+
+public class Test {
+    public static void main(String[] args) {
+        int num = 5;
+        modifyValue(num);
+        System.out.println(num); // 输出 5
+    }
+
+    public static void modifyValue(int value) {
+        value = 10; // 这只会改变局部变量 value 的值
+    }
+}
+在这个例子中，num 的值不会因为 modifyValue() 方法内的修改而改变，因为 num 的值是作为副本传递的。
+
+引用数据类型（如对象、数组等）：
+
+当你将引用数据类型的变量作为参数传递给方法时，传递的仍然是这个引用的副本，也就是说，传递的是指向对象的内存地址的副本。
+虽然方法内可以通过这个引用副本修改对象的内容，但不能改变引用本身（即不能让这个引用指向另一个对象）。
+public class Test {
+    public static void main(String[] args) {
+        MyObject obj = new MyObject();
+        obj.value = 5;
+        modifyObject(obj);
+        System.out.println(obj.value); // 输出 10
+    }
+
+    public static void modifyObject(MyObject object) {
+        object.value = 10; // 修改对象的内容
+        object = new MyObject(); // 尝试让引用指向另一个对象
+        object.value = 20; // 不会影响到原来的对象
+    }
+}
+
+class MyObject {
+    int value;
+}
+在这个例子中：
+obj 是一个引用变量，它指向一个 MyObject 对象。
+modifyObject() 方法可以通过 object 引用修改 MyObject 对象的内容（如将 value 设置为 10），因为 object 引用指向的是 obj 所指向的同一个对象。
+但是，方法内试图让 object 引用指向一个新的 MyObject 对象并不会影响到 main 方法中的 obj 引用，因为它只是修改了 object 的引用副本，而 obj 引用仍然指向原始对象。
+
+值传递：Java 中的所有参数都是值传递，方法接收到的是变量值的副本。
+对于基本数据类型：传递的是数据的值的副本，修改副本不会影响原始变量。
+对于引用数据类型：传递的是引用的副本，方法内可以通过这个引用修改对象的内容，但不能改变原始引用指向的对象。
+
+
+
