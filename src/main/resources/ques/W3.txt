@@ -1,0 +1,56 @@
+26. 问题： 在Spring Boot中如何实现安全认证和授权？有哪些常见的实现方法？
+
+答案： 在Spring Boot中，安全认证和授权可以通过Spring Security框架来实现。Spring Security提供了灵活的认证机制（如表单登录、OAuth2、JWT），以及基于角色和权限的细粒度访问控制。
+
+追问1： 如何在Spring Boot中集成OAuth2认证？
+
+答案： 可以通过添加Spring Security OAuth2依赖并配置安全配置类来集成OAuth2认证，支持多种授权模式（如授权码模式、密码模式等），通过配置ClientDetailsService和AuthorizationServerConfigurerAdapter来管理客户端认证和令牌生成。
+追问2： 什么是JWT（JSON Web Token），如何在Spring Boot中使用它进行身份验证？
+
+答案： JWT是一种紧凑、自包含的令牌格式，用于在各方之间安全地传输信息。可以在Spring Boot中通过添加JWT库并配置JwtTokenProvider类来生成和验证JWT令牌，用于实现无状态的身份验证。
+27. 问题： 如何在Java中实现分布式锁？有哪些常见的实现方式？
+
+答案： 在Java中实现分布式锁常见的方式包括使用Redis、Zookeeper和数据库。
+
+追问1： 如何使用Redis实现分布式锁？
+
+答案： 使用Redis可以通过SETNX命令和EXPIRE命令结合来实现分布式锁，即先使用SETNX（set if not exists）命令尝试获取锁，并设置过期时间来防止死锁。当操作完成后，删除该锁。
+追问2： 如何使用Zookeeper实现分布式锁？
+
+答案： Zookeeper通过创建临时顺序节点来实现分布式锁，所有节点在同一Zookeeper路径下创建临时顺序节点，最小的节点获得锁。其他节点监听前一个节点的删除事件，当前一个节点删除后，依次尝试获取锁。
+28. 问题： 如何在Java中处理大文件（超过内存大小）的读取和写入？
+
+答案： 处理大文件时，可以使用流式读取（Streaming）或内存映射文件（Memory-Mapped File）。
+
+追问1： 如何使用NIO中的FileChannel和MappedByteBuffer处理大文件？
+
+答案： FileChannel允许文件以通道的形式操作，可以使用map()方法将文件映射到内存，通过MappedByteBuffer来实现高效的文件读写操作，这种方式不需要将整个文件加载到内存中。
+追问2： 如何避免在处理大文件时出现内存溢出（OutOfMemoryError）？
+
+答案： 可以通过逐步读取或写入文件的块数据来避免内存溢出，确保在任何时候只处理文件的一小部分，而不是将整个文件加载到内存中。同时，可以使用BufferedReader和BufferedWriter等缓冲流来优化I/O性能。
+29. 问题： 在Java中，如何实现优雅关闭（Graceful Shutdown）？
+
+答案： 优雅关闭意味着在关闭应用程序时，能够完成当前正在处理的任务，并释放相关资源。可以通过在关闭钩子中注册清理操作来实现。
+
+追问1： 如何在Spring Boot中实现优雅关闭？
+
+答案： 在Spring Boot中，可以配置shutdown属性为graceful，并通过自定义DisposableBean接口或注册shutdownHook来确保关闭时释放资源。还可以使用ExecutorService的awaitTermination()方法等待正在处理的任务完成。
+追问2： 如何处理在关闭期间阻塞的操作？
+
+答案： 可以设置超时机制，例如在ExecutorService中使用shutdownNow()来强制终止阻塞操作，或配置适当的超时时间以确保关闭进程不会无限期挂起。
+30. 问题： 如何在Java中实现高性能的缓存机制？常见的缓存策略有哪些？
+
+答案： 实现高性能缓存可以通过使用内存缓存（如ConcurrentHashMap）、分布式缓存（如Redis）、以及合理的缓存淘汰策略。
+
+追问1： 常见的缓存淘汰策略有哪些？它们的适用场景是什么？
+
+答案： 常见的缓存淘汰策略包括：
+LRU（Least Recently Used）：淘汰最近最少使用的缓存项，适用于缓存命中率较高的场景。
+LFU（Least Frequently Used）：淘汰使用频率最低的缓存项，适用于使用频率有明显差异的数据。
+FIFO（First In First Out）：淘汰最早进入缓存的项，适用于先到先服务的场景。
+追问2： 如何在Java中实现分布式缓存的一致性？
+
+答案： 分布式缓存的一致性可以通过以下方式实现：
+使用一致性哈希算法来分配缓存节点，减少数据分布的不均匀性。
+在更新缓存时同步更新或删除其他节点上的缓存数据。
+采用版本控制或数据标签（如Redis的缓存标签）来确保缓存的一致性。
