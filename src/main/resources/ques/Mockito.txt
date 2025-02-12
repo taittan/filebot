@@ -1,0 +1,363 @@
+#### 请你简要介绍一下你使用 Mockito 框架的经验，以及你在项目中是如何使用它的。
+
+"在我过去的项目中，我经常使用 Mockito 框架来编写单元测试。Mockito 非常适合模拟依赖项，尤其是在需要隔离被测试的类时。例如，当我的代码中有一个服务类依赖于多个外部接口或 DAO 类时，我通常会使用 Mockito 来模拟这些依赖项，而无需真正调用外部系统或数据库。
+
+在测试中，我常用的 Mockito 功能包括：
+
+@Mock 和 @InjectMocks：用来创建模拟对象并将它们注入到被测试的类中。
+when/thenReturn：设置模拟对象的行为。
+verify：验证某些方法是否被调用过，调用次数是否符合预期。
+ArgumentCaptor：捕获方法调用时传递的参数，方便进一步断言。
+举个例子，在一个订单系统中，我实现了一个 OrderService 类，其中依赖了 PaymentService 和 InventoryService。在单元测试中，我使用 Mockito 来模拟 PaymentService 和 InventoryService，并通过设置它们的返回值来测试不同场景，比如支付成功、库存不足等。
+
+此外，我对于 Mockito 和 JUnit 的集成也非常熟悉，比如使用 MockitoJUnitRunner 或 MockitoExtension 来简化测试类的配置。
+
+
+
+1. 深入考察 Mock 行为
+问题：
+你知道 Mockito 中的 doThrow 和 doAnswer 是如何使用的吗？它们和 when/thenReturn 有什么区别？
+
+答案：
+doThrow：用于设置当模拟对象的方法被调用时抛出异常的行为。例如：
+java
+
+复制
+doThrow(new RuntimeException("Error")).when(mockService).performAction();
+doAnswer：用于实现自定义的行为逻辑。例如，可以根据方法参数返回不同的结果：
+java
+
+复制
+doAnswer(invocation -> {
+    String arg = invocation.getArgument(0);
+    return "Processed: " + arg;
+}).when(mockService).process(anyString());
+when/thenReturn 与 doThrow/doAnswer 的区别：
+when/thenReturn 是更常用的方式，用于设置简单的返回值或行为。
+doThrow/doAnswer 是在需要抛出异常或实现复杂的自定义逻辑时使用的。
+doThrow/doAnswer 更适合在 void 方法上设置行为，因为 when/thenReturn 不支持直接用于 void 方法。
+追问 1：
+问题：如果需要模拟一个 void 方法的行为，除了 doThrow，还有其他方法吗？
+**答案：**可以使用 doNothing 或者 doAnswer。
+
+doNothing 是默认行为，用于不做任何处理。
+java
+
+复制
+doNothing().when(mockService).performAction();
+也可以通过 doAnswer 实现更复杂的行为逻辑。
+追问 2：
+问题：doReturn 和 thenReturn 有什么区别？
+答案：
+
+doReturn 是一种备用语法，通常用于避免 thenReturn 的某些限制，例如链式调用。
+java
+
+复制
+doReturn("value").when(mockService).getValue();
+thenReturn 在设置返回值时更常用，但 doReturn 能更好处理一些语法限制。
+
+
+
+
+2. 异常处理测试
+问题：
+如果你需要测试一个方法在依赖服务抛出异常时的行为，你会如何使用 Mockito 来实现？
+
+答案：
+可以使用 doThrow 或 when/thenThrow 来模拟依赖服务抛出异常的场景。例如：
+
+java
+
+复制
+when(mockService.performAction()).thenThrow(new RuntimeException("Service error"));
+
+// 测试逻辑是否正确处理异常
+assertThrows(RuntimeException.class, () -> myService.callAction());
+或者，对于 void 方法：
+
+java
+
+复制
+doThrow(new RuntimeException("Error")).when(mockService).performAction();
+然后验证被测代码是否正确处理了异常，或者是否执行了预期的逻辑。
+
+追问 1：
+问题：如何确保依赖服务的异常不会影响其他重要的逻辑？
+答案：
+可以通过断言被测方法的后续逻辑是否被正确执行。例如：
+
+java
+
+复制
+when(mockService.performAction()).thenThrow(new RuntimeException("Error"));
+
+// 调用被测方法
+myService.callAction();
+
+// 验证后续逻辑是否执行
+verify(mockLogger).logError();
+追问 2：
+问题：在异常处理场景中，如何验证异常的具体类型和消息？
+答案：
+可以使用 assertThrows 并对异常对象进行断言：
+
+java
+
+复制
+Throwable exception = assertThrows(RuntimeException.class, () -> myService.callAction());
+assertEquals("Service error", exception.getMessage());
+
+
+
+
+
+5. 行为验证的限制与问题
+问题：
+假如一个被测试的方法调用了某个依赖的方法三次，但你希望验证它只调用了一次，Mockito 提供了哪些验证方法？如何处理这种情况？
+
+答案：
+可以通过 verify 方法验证调用次数：
+
+java
+
+复制
+verify(mockService, times(1)).performAction();
+如果方法被多次调用，可以使用 times 或 atMostOnce 等选项。
+
+追问 1：
+问题：如何检查多次调用时每次调用的参数是否符合预期？
+答案：
+结合 ArgumentCaptor 使用：
+
+java
+
+复制
+verify(mockService, times(3)).performAction(captor.capture());
+List<String> allArgs = captor.getAllValues();
+assertEquals("Expected1", allArgs.get(0));
+assertEquals("Expected2", allArgs.get(1));
+追问 2：
+问题：如果你需要验证方法没有被调用过，你会怎么做？
+答案：
+可以使用 verify 的 never 参数：
+
+java
+
+复制
+verify(mockService, never()).performAction();
+
+
+
+
+
+
+
+6. Mock 和真实对象的结合
+问题：
+在单元测试中，是否有场景需要部分使用真实对象（Spy）？你如何使用 Mockito 实现这种功能？
+
+答案：
+当需要测试真实对象的部分行为，但仍需要模拟某些依赖时，可以使用 spy。例如：
+
+java
+
+复制
+MyClass realObject = new MyClass();
+MyClass spyObject = spy(realObject);
+
+doReturn("Mocked value").when(spyObject).getValue();
+
+// 调用真实方法
+spyObject.performAction();
+追问 1：
+问题：spy 和 mock 有什么区别？
+答案：
+
+mock 是完全的模拟对象，不执行真实方法。
+spy 是基于真实对象的部分模拟，默认会执行真实方法。
+追问 2：
+问题：在使用 spy 时有哪些注意事项？
+答案：
+
+真实方法可能依赖其他未初始化的依赖，导致 NullPointerException。
+使用 spy 时应确保真实方法的副作用不会影响测试结果。
+
+
+
+
+
+
+#### Mockito 常用的注解有哪些，都是如何使用的？
+@Mock	创建 Mock 对象
+@Spy	创建部分 Mock 的真实对象（Spy）
+@InjectMocks	将 Mock 对象注入到被测试类中
+@Captor	创建 ArgumentCaptor 对象
+@RunWith	用于 JUnit 4，自动初始化 Mockito 注解
+@ExtendWith	用于 JUnit 5，自动初始化 Mockito 注解
+@MockitoSettings	自定义 Mockito 设置，比如严格模式
+
+
+
+
+#### Mockito 怎么mock一个静态方法？
+在 Mockito 之前的版本中，无法直接 Mock 静态方法。但是，从 Mockito 3.4.0 开始，Mockito 支持静态方法的 Mock 功能，但需要依赖 PowerMockito（更早版本）或 Mockito 官方扩展 mockito-inline。
+
+以下是如何使用 Mockito Mock 静态方法的详细步骤：
+
+1. 引入依赖
+要 Mock 静态方法，需要引入 mockito-inline 扩展。以下是 Maven 的依赖配置：
+
+xml
+
+复制
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-inline</artifactId>
+    <version>4.x.x</version> <!-- 使用最新版本 -->
+    <scope>test</scope>
+</dependency>
+2. Mock 静态方法的步骤
+Mockito 提供了 Mockito.mockStatic(Class<?> classToMock) 方法，用于 Mock 静态方法。
+
+示例场景：
+假设有一个静态方法 StaticUtils.getGreeting(String name)，返回一个问候语。我们需要 Mock 这个方法。
+
+java
+
+复制
+public class StaticUtils {
+    public static String getGreeting(String name) {
+        return "Hello, " + name;
+    }
+}
+Mock 静态方法的代码：
+java
+
+复制
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import static org.mockito.Mockito.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class StaticUtilsTest {
+
+    @Test
+    public void testStaticMethodMock() {
+        // 使用 mockStatic 开始 Mock 静态方法
+        try (MockedStatic<StaticUtils> mockedStatic = mockStatic(StaticUtils.class)) {
+            // 设置 Mock 行为
+            mockedStatic.when(() -> StaticUtils.getGreeting("John")).thenReturn("Mocked Greeting");
+
+            // 测试静态方法
+            String result = StaticUtils.getGreeting("John");
+            assertEquals("Mocked Greeting", result);
+
+            // 验证静态方法是否被调用
+            mockedStatic.verify(() -> StaticUtils.getGreeting("John"));
+        }
+
+        // 超出 try-with-resources 范围后，Mock 会自动关闭，恢复静态方法的真实行为
+        assertEquals("Hello, John", StaticUtils.getGreeting("John"));
+    }
+}
+说明：
+MockedStatic 是一个 AutoCloseable 对象，Mock 行为仅在其生命周期内有效。
+使用 try-with-resources 确保 Mock 行为在测试结束后自动恢复。
+mockStatic 方法可以设置特定静态方法的行为，还支持调用验证。
+3. 其他功能
+验证静态方法是否被调用
+使用 verify 验证静态方法的调用次数或参数：
+
+java
+
+复制
+mockedStatic.verify(() -> StaticUtils.getGreeting("John"), times(1));
+Mock 多个静态方法
+如果一个类有多个静态方法，可以为每个方法单独设置 Mock 行为：
+
+java
+
+复制
+mockedStatic.when(() -> StaticUtils.method1()).thenReturn("Mocked method1");
+mockedStatic.when(() -> StaticUtils.method2()).thenReturn("Mocked method2");
+4. 注意事项
+mockito-inline 扩展 是支持静态方法 Mock 的关键，如果没有引入该依赖，将无法使用 mockStatic 方法。
+静态方法 Mock 应谨慎使用：
+静态方法通常会引入全局状态，过度 Mock 静态方法可能导致测试难以维护。
+更推荐测试逻辑分离良好的代码，而不是依赖于静态方法的 Mock。
+Mock 的生命周期是有限的，超出 MockedStatic 的作用范围后，静态方法会恢复真实行为。
+5. 与 PowerMockito 的对比
+在 Mockito 3.4.0 之前，Mock 静态方法需要使用 PowerMockito，但它的配置较为复杂，且需要配合特定的运行器（JUnit 4 的 PowerMockRunner）。
+
+PowerMockito 示例：
+
+java
+
+复制
+@PrepareForTest(StaticUtils.class)
+@RunWith(PowerMockRunner.class)
+public class StaticUtilsTest {
+
+    @Test
+    public void testStaticMethodMock() {
+        // Mock 静态方法
+        PowerMockito.mockStatic(StaticUtils.class);
+        when(StaticUtils.getGreeting("John")).thenReturn("Mocked Greeting");
+
+        // 测试
+        String result = StaticUtils.getGreeting("John");
+        assertEquals("Mocked Greeting", result);
+
+        // 验证
+        PowerMockito.verifyStatic(StaticUtils.class, times(1));
+        StaticUtils.getGreeting("John");
+    }
+}
+对比：
+
+Mockito + mockito-inline 是官方支持，推荐使用，配置简单。
+PowerMockito 适用于老版本 Mockito，但复杂性较高，不推荐新的项目使用。
+6. 总结
+使用 Mockito Mock 静态方法的关键点：
+
+添加 mockito-inline 依赖。
+使用 try (MockedStatic<ClassName> mockedStatic = mockStatic(ClassName.class)) 开始 Mock 。
+通过 when 配置 Mock 行为，并使用 verify 验证调用。
+Mockito 的静态方法 Mock 功能非常强大，同时简化了测试代码的编写。
+
+
+
+
+#### mockito 怎么mock 私有方法吗？
+Mockito 本身不直接支持 Mock 私有方法，这是因为 Mockito 的设计理念是鼓励测试类的外部行为，而不是其内部实现细节。私有方法通常属于类的内部实现细节，理论上不应该直接测试私有方法，而是通过测试公共方法间接验证私有方法的行为。
+
+不过，在一些特殊场景下，如果确实需要 Mock 私有方法，可以通过以下方法实现：
+
+1. 推荐方式：通过公共方法间接测试私有方法
+在理想的设计中，私有方法通常是被公共方法调用的，因此，通过测试公共方法的输出和行为，间接验证私有方法的逻辑。
+
+2. 使用 PowerMockito Mock 私有方法
+如果确实需要 Mock 私有方法，可以使用 PowerMockito，它允许通过反射调用和 Mock 私有方法。
+
+3. 通过 Java 反射调用私有方法
+如果不想引入 PowerMockito，也可以通过 Java 反射调用和 Mock 私有方法。这种方式较为复杂且不建议在常规测试中使用
+
+4. 为什么不建议直接测试私有方法？
+设计上的考虑：
+私有方法属于类的内部实现细节，通常不应暴露给外界测试。
+如果需要测试私有方法的逻辑，说明类的设计可能存在问题，可以考虑将私有方法提取到新的类中（遵循单一职责原则）。
+替代方案：
+提取私有方法到独立的类：
+将复杂的私有方法提取为公共方法，放入新的辅助类中，这样可以直接测试。
+增加包级访问权限：
+如果私有方法确实需要测试，可以将方法的访问权限从 private 修改为 package-private（无修饰符），这样可以在同一包下测试。
+总结
+推荐方式：通过测试公共方法来间接验证私有方法。
+PowerMockito：可以通过 PowerMockito Mock 私有方法，但需要额外依赖。
+反射：可以通过 Java 反射调用私有方法，但不能直接 Mock。
+重构代码：如果私有方法逻辑复杂，应考虑重构，将其提取到新类中并直接测试。
+Mock 私有方法应作为最后的选择，更多时候我们应该关注类的外部行为和设计。
+
+
